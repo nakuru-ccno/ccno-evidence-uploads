@@ -7,92 +7,100 @@
 <style>
   body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #fff;
+    background: #f9f9f9;
     margin: 0; padding: 0;
-    color: #0d47a1; /* dark blue */
+    color: #000;
   }
   header {
     display: flex;
     align-items: center;
-    background: #b71c1c; /* red */
-    padding: 15px 25px;
+    background: #0277bd; /* blue header */
+    padding: 10px 20px;
     color: white;
-    font-weight: 700;
-    font-size: 1.4em;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    font-weight: 600;
+    font-size: 1.2em;
   }
   header img {
     height: 50px;
-    margin-right: 20px;
+    margin-right: 15px;
   }
   .container {
     max-width: 650px;
     background: white;
     margin: 40px auto;
-    padding: 30px 30px 40px;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    border: 2px solid #0d47a1; /* blue border */
+    padding: 30px;
+    border-radius: 8px;
+    border: 2px solid #2e7d32; /* green border */
+  }
+  h2 {
+    text-align: center;
+    font-weight: bold;
+    color: #b71c1c; /* red heading */
+    margin-top: 0;
+    margin-bottom: 20px;
   }
   label {
     display: block;
-    margin-top: 18px;
+    margin-top: 15px;
     font-weight: 600;
-    color: #b71c1c; /* red labels */
+    color: #2e7d32; /* green labels */
   }
   input[type="text"], select, input[type="file"] {
     width: 100%;
-    padding: 10px 12px;
-    margin-top: 7px;
-    border: 2px solid #0d47a1; /* blue border */
-    border-radius: 8px;
+    padding: 10px;
+    margin-top: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
     font-size: 1em;
-    transition: border-color 0.3s ease;
-    color: #0d47a1;
   }
-  input[type="text"]:focus, select:focus, input[type="file"]:focus {
-    border-color: #b71c1c; /* red focus */
-    outline: none;
+  input[type="file"] {
+    padding: 5px;
+  }
+  small {
+    display: block;
+    font-size: 0.85em;
+    color: #666;
+    margin-top: 4px;
   }
   button {
-    margin-top: 28px;
+    margin-top: 25px;
     width: 100%;
     padding: 14px;
     font-size: 1.1em;
-    background-color: #0d47a1; /* blue button */
+    background-color: #b71c1c; /* red button */
     color: white;
     border: none;
-    border-radius: 10px;
+    border-radius: 5px;
     cursor: pointer;
     font-weight: 700;
     transition: background-color 0.25s ease;
   }
   button:hover {
-    background-color: #1565c0; /* lighter blue hover */
+    background-color: #d32f2f;
   }
   .spinner {
     display: none;
     margin: 20px 0;
     text-align: center;
-    color: #b71c1c; /* red spinner */
+    color: #b71c1c;
     font-weight: 600;
   }
   .success {
     display: none;
     margin: 20px 0;
     padding: 15px;
-    background: #bbdefb; /* light blue */
+    background: #bbdefb;
     color: #0d47a1;
-    border-radius: 10px;
+    border-radius: 4px;
     font-weight: 600;
   }
   .error {
     display: none;
     margin: 20px 0;
     padding: 15px;
-    background: #ffcdd2; /* light red */
+    background: #ffcdd2;
     color: #b71c1c;
-    border-radius: 10px;
+    border-radius: 4px;
     font-weight: 600;
   }
 </style>
@@ -101,12 +109,15 @@
 
 <header>
   <img src="https://www.nakurucountychiefnursingofficer.site/lovable-uploads/00cc8120-039e-4419-8b2b-e07e69d6fdd8.png" alt="Nakuru County Logo" />
-  Nakuru County CCNO Evidence Upload
+  Q1 FY 25/26 Performance Contract
 </header>
 
 <div class="container">
+  <h2>Nakuru County CCNO PC Evidence Upload</h2>
+
   <label for="evidenceName">Evidence Name:</label>
   <input type="text" id="evidenceName" placeholder="e.g., CME on Family Planning Methods" />
+  <small>Give a short descriptive name for this evidence.</small>
 
   <label for="category">Evidence Category:</label>
   <select id="category">
@@ -141,15 +152,15 @@
     <option>Gilgil Sub County</option>
   </select>
 
-  <label for="files">Choose PDF file(s) (max 3MB each, up to 5 files):</label>
+  <label for="files">Choose PDF file(s) (max 3MB each, up to 10 files):</label>
   <input type="file" id="files" accept="application/pdf" multiple />
+  <small>You can select multiple PDF files (maximum 10). Files larger than 3MB will be rejected.</small>
 
   <div class="spinner" id="spinner">⏳ Uploading...</div>
   <div class="success" id="success">✅ Upload successful!</div>
   <div class="error" id="error"></div>
 
-  <button id="uploadBtn">Upload</button>
-  <button type="button" id="resetBtn">Reset</button>
+  <button id="uploadBtn">Upload PDF Evidence</button>
 </div>
 
 <script>
@@ -163,16 +174,6 @@
   const successMsg = document.getElementById('success');
   const errorMsg = document.getElementById('error');
   const uploadBtn = document.getElementById('uploadBtn');
-  const resetBtn = document.getElementById('resetBtn');
-
-  function resetForm() {
-    evidenceNameInput.value = '';
-    categorySelect.value = '';
-    subCountySelect.value = '';
-    filesInput.value = '';
-    successMsg.style.display = 'none';
-    errorMsg.style.display = 'none';
-  }
 
   function showError(msg) {
     errorMsg.textContent = msg;
@@ -201,8 +202,8 @@
       showError('Please select at least one PDF file.');
       return;
     }
-    if (files.length > 5) {
-      showError('You can upload a maximum of 5 files.');
+    if (files.length > 10) {
+      showError('You can upload a maximum of 10 files.');
       return;
     }
 
@@ -259,7 +260,10 @@
 
       if (data.success) {
         showSuccess();
-        resetForm();
+        evidenceNameInput.value = '';
+        categorySelect.value = '';
+        subCountySelect.value = '';
+        filesInput.value = '';
       } else {
         showError(data.message || 'Upload failed');
       }
@@ -269,9 +273,7 @@
   }
 
   uploadBtn.addEventListener('click', upload);
-  resetBtn.addEventListener('click', resetForm);
 </script>
 
 </body>
 </html>
-
