@@ -14,7 +14,7 @@
   header {
     display: flex;
     align-items: center;
-    background: #0277bd; /* blue header */
+    background: #0277bd;
     padding: 10px 20px;
     color: white;
     font-weight: 600;
@@ -30,12 +30,12 @@
     margin: 40px auto;
     padding: 30px;
     border-radius: 8px;
-    border: 2px solid #2e7d32; /* green border */
+    border: 2px solid #2e7d32;
   }
   h2 {
     text-align: center;
     font-weight: bold;
-    color: #b71c1c; /* red heading */
+    color: #b71c1c;
     margin-top: 0;
     margin-bottom: 20px;
   }
@@ -43,7 +43,7 @@
     display: block;
     margin-top: 15px;
     font-weight: 600;
-    color: #2e7d32; /* green labels */
+    color: #2e7d32;
   }
   input[type="text"], select, input[type="file"] {
     width: 100%;
@@ -67,7 +67,7 @@
     width: 100%;
     padding: 14px;
     font-size: 1.1em;
-    background-color: #b71c1c; /* red button */
+    background-color: #b71c1c;
     color: white;
     border: none;
     border-radius: 5px;
@@ -106,50 +106,49 @@
 </style>
 </head>
 <body>
-
 <header>
   <img src="https://www.nakurucountychiefnursingofficer.site/lovable-uploads/00cc8120-039e-4419-8b2b-e07e69d6fdd8.png" alt="Nakuru County Logo" />
   Q1 FY 25/26 Performance Contract
 </header>
-
 <div class="container">
   <h2>Nakuru County CCNO PC Evidence Upload</h2>
 
   <label for="evidenceName">Evidence Name:</label>
   <input type="text" id="evidenceName" placeholder="e.g., CME on Family Planning Methods" />
+
   <small>Give a short descriptive name for this evidence.</small>
 
   <label for="category">Evidence Category:</label>
-  <select id="category">
+  <select id="category" required>
     <option value="">Select Evidence Category</option>
-    <option>C02 Referral System Improved</option>
-    <option>C04 Operationalization of Health Facilities to Better Services</option>
-    <option>C10 Theater Services Improved</option>
-    <option>C11 In-Patient Services Improved</option>
-    <option>C14 ANC (Antenatal Care)</option>
-    <option>C15 POSTNATAL CARE</option>
-    <option>C16 MPDSR (Maternal and Perinatal Death Surveillance and Response)</option>
-    <option>C17 FAMILY PLANNING</option>
-    <option>C18 IMMUNIZATION</option>
-    <option>C21 HIV SERVICES</option>
-    <option>C23 BURDEN OF CANCER REDUCED</option>
-    <option>C27 SUPPORT SUPERVISION</option>
+    <option value="C02 Referral System Improved">C02 Referral System Improved</option>
+    <option value="C04 Operationalization of Health Facilities to Better Services">C04 Operationalization of Health Facilities to Better Services</option>
+    <option value="C10 Theater Services Improved">C10 Theater Services Improved</option>
+    <option value="C11 In-Patient Services Improved">C11 In-Patient Services Improved</option>
+    <option value="C14 ANC (Antenatal Care)">C14 ANC (Antenatal Care)</option>
+    <option value="C15 POSTNATAL CARE">C15 POSTNATAL CARE</option>
+    <option value="C16 MPDSR (Maternal and Perinatal Death Surveillance and Response)">C16 MPDSR (Maternal and Perinatal Death Surveillance and Response)</option>
+    <option value="C17 FAMILY PLANNING">C17 FAMILY PLANNING</option>
+    <option value="C18 IMMUNIZATION">C18 IMMUNIZATION</option>
+    <option value="C21 HIV SERVICES">C21 HIV SERVICES</option>
+    <option value="C23 BURDEN OF CANCER REDUCED">C23 BURDEN OF CANCER REDUCED</option>
+    <option value="C27 SUPPORT SUPERVISION">C27 SUPPORT SUPERVISION</option>
   </select>
 
   <label for="subCounty">Sub County:</label>
-  <select id="subCounty">
+  <select id="subCounty" required>
     <option value="">Select Sub County</option>
-    <option>Nakuru West Sub County</option>
-    <option>Nakuru East Sub County</option>
-    <option>Nakuru North Sub County</option>
-    <option>Naivasha Sub County</option>
-    <option>Rongai Sub County</option>
-    <option>Kuresoi South Sub County</option>
-    <option>Kuresoi North Sub County</option>
-    <option>Subukia Sub County</option>
-    <option>Molo Sub County</option>
-    <option>Njoro Sub County</option>
-    <option>Gilgil Sub County</option>
+    <option value="Nakuru West Sub County">Nakuru West Sub County</option>
+    <option value="Nakuru East Sub County">Nakuru East Sub County</option>
+    <option value="Nakuru North Sub County">Nakuru North Sub County</option>
+    <option value="Naivasha Sub County">Naivasha Sub County</option>
+    <option value="Rongai Sub County">Rongai Sub County</option>
+    <option value="Kuresoi South Sub County">Kuresoi South Sub County</option>
+    <option value="Kuresoi North Sub County">Kuresoi North Sub County</option>
+    <option value="Subukia Sub County">Subukia Sub County</option>
+    <option value="Molo Sub County">Molo Sub County</option>
+    <option value="Njoro Sub County">Njoro Sub County</option>
+    <option value="Gilgil Sub County">Gilgil Sub County</option>
   </select>
 
   <label for="files">Choose PDF file(s) (max 3MB each, up to 10 files):</label>
@@ -162,7 +161,6 @@
 
   <button id="uploadBtn">Upload PDF Evidence</button>
 </div>
-
 <script>
   const PROXY_URL = 'https://ccno-proxy-production.up.railway.app/upload-evidence';
 
@@ -192,6 +190,9 @@
     const evidenceName = evidenceNameInput.value.trim();
     const category = categorySelect.value;
     const subCounty = subCountySelect.value;
+
+    console.log('SubCounty selected:', subCounty); // Debug line
+
     const files = filesInput.files;
 
     if (!evidenceName || !category || !subCounty) {
@@ -274,6 +275,5 @@
 
   uploadBtn.addEventListener('click', upload);
 </script>
-
 </body>
 </html>
