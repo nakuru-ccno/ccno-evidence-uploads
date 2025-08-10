@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f6f9f6;
+    margin: 0;
+    padding: 0;
+  }
+  header {
+    display: flex;
+    align-items: center;
+    background: linear-gradient(90deg, #a8d5ba, #d4edda);
+    padding: 10px 20px;
+    color: #034d2d;
+    font-weight: bold;
+    font-size: 1.2em;
+  }
+  header img {
+    height: 50px;
+    margin-right: 15px;
+  }
+  .container {
+    background: white;
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+  }
+  label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+  }
+  input, select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #c8e6c9;
+    border-radius: 6px;
+  }
+  button {
+    margin-top: 20px;
+    padding: 10px;
+    background: #81c784;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  button:hover {
+    background: #66bb6a;
+  }
+  .spinner {
+    display: none;
+    margin: 15px 0;
+    text-align: center;
+  }
+  .success {
+    display: none;
+    margin: 15px 0;
+    padding: 10px;
+    background: #d4edda;
+    color: #155724;
+    border-radius: 6px;
+  }
+  .error {
+    display: none;
+    margin: 15px 0;
+    padding: 10px;
+    background: #f8d7da;
+    color: #721c24;
+    border-radius: 6px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <img src="NAKURU LOGO.png" alt="Logo">
+  Nakuru County CCNO PC Evidence Upload
+</header>
+
+<div class="container">
+  <label>Evidence Name:</label>
+  <input type="text" id="evidenceName" placeholder="e.g., CME on Family Planning Methods">
+
+  <label>Evidence Category:</label>
+  <select id="category">
+    <option value="">Select Evidence Category</option>
+    <option>C02 Referral System Improved</option>
+    <option>C04 Operationalization of Health Facilities to Better Services</option>
+    <option>C10 Theater Services Improved</option>
+    <option>C11 In-Patient Services Improved</option>
+    <option>C14 ANC (Antenatal Care)</option>
+    <option>C15 POSTNATAL CARE</option>
+    <option>C16 MPDSR (Maternal and Perinatal Death Surveillance and Response)</option>
+    <option>C17 FAMILY PLANNING</option>
+    <option>C18 IMMUNIZATION</option>
+    <option>C21 HIV SERVICES</option>
+    <option>C23 BURDEN OF CANCER REDUCED</option>
+    <option>C27 SUPPORT SUPERVISION</option>
+  </select>
+
+  <label>Sub County:</label>
+  <select id="subCounty">
+    <option value="">Select Sub County</option>
+    <option>Nakuru West Sub County</option>
+    <option>Nakuru East Sub County</option>
+    <option>Nakuru North Sub County</option>
+    <option>Naivasha Sub County</option>
+    <option>Rongai Sub County</option>
+    <option>Kuresoi South Sub County</option>
+    <option>Kuresoi North Sub County</option>
+    <option>Subukia Sub County</option>
+    <option>Molo Sub County</option>
+    <option>Njoro Sub County</option>
+    <option>Gilgil Sub County</option>
+  </select>
+
+  <label>Choose PDF file(s) (max 3MB each, up to 5 files):</label>
+  <input type="file" id="files" accept="application/pdf" multiple>
+
+  <div class="spinner" id="spinner">⏳ Uploading...</div>
+  <div class="success" id="success">✅ Upload successful!</div>
+  <div class="error" id="error"></div>
+
+  <button onclick="upload()">Upload</button>
+  <button type="button" onclick="resetForm()">Reset</button>
+</div>
+
+<script>
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyGwRMVtQyksOJBUeeaA6zhUvhSd5reOTdivoS8FSwvL_d-j4Iyj4zZDQrmY88EkfEpzQ/exec";
+
+function upload() {
+  const evidenceName = document.getElementById('evidenceName').value.trim();
+  const category = document.getElementById('category').value;
+  const subCounty = document.getElementById('subCounty').value;
+  const files = document.getElementById('files').files;
+
+  hideMessages();
+
+  if (!evidenceName || !category || !subCounty || files.length === 0) {
+    showError('Please fill in all fields and select at least one file.');
+    return;
+  }
+  if (files.length > 5) {
+    showError('You can upload a maximum of 5 files.');
+    return;
+  }
+
+  let fileData = [];
+  let promises = [];
+  for (let file of files) {
+    if (file.size > 3 * 1024 * 1024) {
+      showError(`File ${file.name} exceeds 3MB limit.`);
+      return;
+    }
+    promises.push(new Promise((resolve) => {
+      let reader = new FileReader();
+      reader.onload = function(e) {
+        let content = e.target.result.split(',')[1];
+        fileData.push({ name: file.name, type: file.type, data: content });
+        resolve();
+      };
+      reader.readAsDataURL(file);
+    }));
+  }
+
+  Promise.all(promises).then(() => {
+    document.getElementById('spinner').style.display = 'block';
+
+    fetch(WEB_APP_URL, {
+      method: 'POST',
+      body: JSON.stringify({ evidenceName, category, subCounty, files: fileData }),
+      headers: { 'Content-Type': 'application/json' }
+    })
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('spinner').style.display = 'none';
+      if (data.success) {
+        document.getElementById('success').style.display = 'block';
+        resetForm();
+      } else {
+        showError(data.message || "Upload failed");
+      }
+    })
+    .catch(error => {
+      document.getElementById('spinner').style.display = 'none';
+      showError('Error: ' + error.message);
+    });
+  });
+}
+
+function showError(msg) {
+  const errorDiv = document.getElementById('error');
+  errorDiv.innerText = msg;
+  errorDiv.style.display = 'block';
+}
+
+function hideMessages() {
+  document.getElementById('error').style.display = 'none';
+  document.getElementById('success').style.display = 'none';
+}
+
+function resetForm() {
+  document.getElementById('evidenceName').value = '';
+  document.getElementById('category').value = '';
+  document.getElementById('subCounty').value = '';
+  document.getElementById('files').value = '';
+  hideMessages();
+}
+</script>
+
+</body>
+</html>
