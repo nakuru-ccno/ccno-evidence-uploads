@@ -103,6 +103,18 @@
     border-radius: 4px;
     font-weight: 600;
   }
+  #progressWrapper {
+    display: none;
+    margin-top: 15px;
+  }
+  #progressBar {
+    width: 100%;
+  }
+  #progressPercent {
+    text-align: center;
+    font-weight: 600;
+    color: #b71c1c;
+  }
 </style>
 </head>
 <body>
@@ -153,9 +165,13 @@
 
   <label for="files">Choose PDF file(s) (max 20MB each, up to 5 files):</label>
   <input type="file" id="files" accept="application/pdf" multiple />
-  <small>You can select multiple PDF files (maximum 5). Files larger than 3MB will be rejected.</small>
+  <small>You can select multiple PDF files (maximum 5). Files larger than 20MB will be rejected.</small>
 
   <div class="spinner" id="spinner">⏳ Uploading...</div>
+  <div id="progressWrapper">
+    <progress id="progressBar" value="0" max="100"></progress>
+    <div id="progressPercent">0%</div>
+  </div>
   <div class="success" id="success">✅ Upload successful!</div>
   <div class="error" id="error"></div>
 
@@ -191,8 +207,6 @@
     const category = categorySelect.value;
     const subCounty = subCountySelect.value;
 
-    console.log('SubCounty selected:', subCounty); // Debug line
-
     const files = filesInput.files;
 
     if (!evidenceName || !category || !subCounty) {
@@ -209,7 +223,7 @@
     }
 
     for (let f of files) {
-      if (f.size > 3 * 1024 * 1024) {
+      if (f.size > 20 * 1024 * 1024) {
         showError(`File ${f.name} exceeds the 20MB size limit.`);
         return;
       }
@@ -246,29 +260,57 @@
         files: fileData,
       };
 
-      const response = await fetch(PROXY_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
+      // Show progress bar
+      const progressWrapper = document.getElementById('progressWrapper');
+      const progressBar = document.getElementById('progressBar');
+      const progressPercent = document.getElementById('progressPercent');
+      progressWrapper.style.display = 'block';
+      progressBar.value = 0;
+      progressPercent.textContent = '0%';
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Server error: ${errorText}`);
-      }
+      // Use XMLHttpRequest for progress
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', PROXY_URL, true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
 
-      const data = await response.json();
+      xhr.upload.onprogress = function (event) {
+        if (event.lengthComputable) {
+          const percent = Math.round((event.loaded / event.total) * 100);
+          progressBar.value = percent;
+          progressPercent.textContent = percent + '%';
+        }
+      };
 
-      if (data.success) {
-        showSuccess();
-        evidenceNameInput.value = '';
-        categorySelect.value = '';
-        subCountySelect.value = '';
-        filesInput.value = '';
-      } else {
-        showError(data.message || 'Upload failed');
-      }
+      xhr.onload = function () {
+        spinner.style.display = 'none';
+        progressWrapper.style.display = 'none';
+
+        if (xhr.status >= 200 && xhr.status < 300) {
+          const data = JSON.parse(xhr.responseText);
+          if (data.success) {
+            showSuccess();
+            evidenceNameInput.value = '';
+            categorySelect.value = '';
+            subCountySelect.value = '';
+            filesInput.value = '';
+          } else {
+            showError(data.message || 'Upload failed');
+          }
+        } else {
+          showError('Server error: ' + xhr.statusText);
+        }
+      };
+
+      xhr.onerror = function () {
+        spinner.style.display = 'none';
+        progressWrapper.style.display = 'none';
+        showError('Upload failed due to a network error.');
+      };
+
+      xhr.send(JSON.stringify(payload));
+
     } catch (error) {
+      spinner.style.display = 'none';
       showError('Upload failed: ' + error.message);
     }
   }
