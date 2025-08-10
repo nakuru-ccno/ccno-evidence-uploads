@@ -1,95 +1,147 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Evidence Upload - Nakuru County CCNO</title>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+  * {
+    box-sizing: border-box;
+  }
   body {
-    font-family: Arial, sans-serif;
-    background-color: #f6f9f6;
     margin: 0;
-    padding: 0;
+    background: #f0f4f8;
+    font-family: 'Inter', sans-serif;
+    color: #2c3e50;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
   header {
+    background: linear-gradient(90deg, #1abc9c, #16a085);
+    color: white;
+    padding: 1rem 2rem;
+    font-weight: 700;
+    font-size: 1.5rem;
     display: flex;
     align-items: center;
-    background: linear-gradient(90deg, #a8d5ba, #d4edda);
-    padding: 10px 20px;
-    color: #034d2d;
-    font-weight: bold;
-    font-size: 1.2em;
+    gap: 1rem;
   }
   header img {
     height: 50px;
-    margin-right: 15px;
   }
-  .container {
-    background: white;
+  main {
+    flex-grow: 1;
     max-width: 600px;
-    margin: 30px auto;
-    padding: 20px;
+    margin: 3rem auto;
+    background: white;
     border-radius: 12px;
-    box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+    padding: 2rem 2.5rem;
+    box-shadow: 0 8px 20px rgb(0 0 0 / 0.1);
   }
   label {
     display: block;
-    margin-top: 15px;
-    font-weight: bold;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    margin-top: 1.25rem;
+    color: #34495e;
   }
-  input, select {
+  select, input[type="text"], input[type="file"] {
     width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-    border: 1px solid #c8e6c9;
-    border-radius: 6px;
+    padding: 0.6rem 0.8rem;
+    border: 1.8px solid #bdc3c7;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+  select:focus, input[type="text"]:focus, input[type="file"]:focus {
+    outline: none;
+    border-color: #1abc9c;
+    box-shadow: 0 0 8px #1abc9caa;
+  }
+  input[type="file"] {
+    padding: 0.3rem 0.8rem;
+  }
+  .btn-group {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
   }
   button {
-    margin-top: 20px;
-    padding: 10px;
-    background: #81c784;
-    color: white;
-    border: none;
-    border-radius: 6px;
     cursor: pointer;
-    font-weight: bold;
+    border: none;
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+    flex-grow: 1;
   }
-  button:hover {
-    background: #66bb6a;
+  button.upload-btn {
+    background-color: #1abc9c;
+    color: white;
+  }
+  button.upload-btn:hover {
+    background-color: #159a87;
+  }
+  button.reset-btn {
+    background-color: #ecf0f1;
+    color: #7f8c8d;
+  }
+  button.reset-btn:hover {
+    background-color: #d0d7db;
   }
   .spinner {
-    display: none;
-    margin: 15px 0;
+    margin: 1rem 0;
     text-align: center;
-  }
-  .success {
+    font-size: 1.4rem;
+    color: #16a085;
     display: none;
-    margin: 15px 0;
-    padding: 10px;
-    background: #d4edda;
-    color: #155724;
-    border-radius: 6px;
   }
-  .error {
+  .message {
+    margin: 1.5rem 0;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
     display: none;
-    margin: 15px 0;
-    padding: 10px;
-    background: #f8d7da;
-    color: #721c24;
-    border-radius: 6px;
+  }
+  .message.success {
+    background-color: #d4f4dd;
+    color: #2e7d32;
+    border: 1.5px solid #81c784;
+  }
+  .message.error {
+    background-color: #fce4e4;
+    color: #c62828;
+    border: 1.5px solid #ef9a9a;
+  }
+  @media (max-width: 640px) {
+    main {
+      margin: 1.5rem;
+      padding: 1.5rem;
+    }
+    button {
+      font-size: 1rem;
+      padding: 0.6rem 1rem;
+    }
   }
 </style>
 </head>
 <body>
 
 <header>
-  <img src="NAKURU LOGO.png" alt="Logo">
-  Nakuru County CCNO PC Evidence Upload
+  <img src="NAKURU LOGO.png" alt="Nakuru County Logo" />
+  Nakuru County CCNO - Evidence Upload
 </header>
 
-<div class="container">
-  <label>Evidence Name:</label>
-  <input type="text" id="evidenceName" placeholder="e.g., CME on Family Planning Methods">
+<main>
+  <label for="evidenceName">Evidence Name</label>
+  <input type="text" id="evidenceName" placeholder="e.g., CME on Family Planning Methods" />
 
-  <label>Evidence Category:</label>
+  <label for="category">Evidence Category</label>
   <select id="category">
     <option value="">Select Evidence Category</option>
     <option>C02 Referral System Improved</option>
@@ -106,7 +158,7 @@
     <option>C27 SUPPORT SUPERVISION</option>
   </select>
 
-  <label>Sub County:</label>
+  <label for="subCounty">Sub County</label>
   <select id="subCounty">
     <option value="">Select Sub County</option>
     <option>Nakuru West Sub County</option>
@@ -122,20 +174,20 @@
     <option>Gilgil Sub County</option>
   </select>
 
-  <label>Choose PDF file(s) (max 3MB each, up to 5 files):</label>
-  <input type="file" id="files" accept="application/pdf" multiple>
+  <label for="files">Choose PDF file(s) (max 3MB each, up to 5 files)</label>
+  <input type="file" id="files" accept="application/pdf" multiple />
 
   <div class="spinner" id="spinner">⏳ Uploading...</div>
-  <div class="success" id="success">✅ Upload successful!</div>
-  <div class="error" id="error"></div>
+  <div class="message success" id="success"></div>
+  <div class="message error" id="error"></div>
 
-  <button onclick="upload()">Upload</button>
-  <button type="button" onclick="resetForm()">Reset</button>
-</div>
+  <div class="btn-group">
+    <button class="upload-btn" onclick="upload()">Upload</button>
+    <button class="reset-btn" type="button" onclick="resetForm()">Reset</button>
+  </div>
+</main>
 
 <script>
-const BACKEND_URL = "https://ccno-proxy-production.up.railway.app/upload-evidence";
-
 function upload() {
   const evidenceName = document.getElementById('evidenceName').value.trim();
   const category = document.getElementById('category').value;
@@ -155,10 +207,9 @@ function upload() {
 
   let fileData = [];
   let promises = [];
-
   for (let file of files) {
     if (file.size > 3 * 1024 * 1024) {
-      showError(`File ${file.name} exceeds 3MB limit.`);
+      showError(`File "${file.name}" exceeds 3MB limit.`);
       return;
     }
     promises.push(new Promise((resolve) => {
@@ -175,46 +226,56 @@ function upload() {
   Promise.all(promises).then(() => {
     document.getElementById('spinner').style.display = 'block';
 
-    fetch(BACKEND_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+    fetch('https://ccno-proxy-production.up.railway.app/upload-evidence', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ evidenceName, category, subCounty, files: fileData })
     })
     .then(response => response.json())
     .then(res => {
       document.getElementById('spinner').style.display = 'none';
       if (res.success) {
-        document.getElementById('success').style.display = 'block';
+        showSuccess(`✅ Upload successful for "${evidenceName}" in ${subCounty}!`);
+        resetFormInputs();
       } else {
-        showError(res.message || "Upload failed.");
+        showError(res.message || 'Upload failed');
       }
     })
-    .catch(err => {
+    .catch(error => {
       document.getElementById('spinner').style.display = 'none';
-      showError("Error uploading evidence: " + err.message);
+      showError('Upload error: ' + error.message);
     });
   });
 }
 
 function showError(msg) {
-  const errDiv = document.getElementById('error');
-  errDiv.innerText = msg;
-  errDiv.style.display = 'block';
+  const errorDiv = document.getElementById('error');
+  errorDiv.textContent = msg;
+  errorDiv.style.display = 'block';
+  document.getElementById('success').style.display = 'none';
 }
-
+function showSuccess(msg) {
+  const successDiv = document.getElementById('success');
+  successDiv.textContent = msg;
+  successDiv.style.display = 'block';
+  document.getElementById('error').style.display = 'none';
+}
 function clearMessages() {
   document.getElementById('error').style.display = 'none';
   document.getElementById('success').style.display = 'none';
 }
-
-function resetForm() {
+function resetFormInputs() {
   document.getElementById('evidenceName').value = '';
   document.getElementById('category').value = '';
   document.getElementById('subCounty').value = '';
   document.getElementById('files').value = '';
+}
+function resetForm() {
   clearMessages();
+  resetFormInputs();
 }
 </script>
 
 </body>
 </html>
+
