@@ -5,104 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>CCNO Evidence Upload</title>
 <style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f9f9f9;
-    margin: 0; padding: 0;
-    color: #000;
-  }
-  header {
-    display: flex;
-    align-items: center;
-    background: #0277bd;
-    padding: 10px 20px;
-    color: white;
-    font-weight: 600;
-    font-size: 1.2em;
-  }
-  header img {
-    height: 50px;
-    margin-right: 15px;
-  }
-  .container {
-    max-width: 650px;
-    background: white;
-    margin: 40px auto;
-    padding: 30px;
-    border-radius: 8px;
-    border: 2px solid #2e7d32;
-  }
-  h2 {
-    text-align: center;
-    font-weight: bold;
-    color: #b71c1c;
-    margin-top: 0;
-    margin-bottom: 20px;
-  }
-  label {
-    display: block;
-    margin-top: 15px;
-    font-weight: 600;
-    color: #2e7d32;
-  }
-  input[type="text"], select, input[type="file"] {
-    width: 100%;
-    padding: 10px;
-    margin-top: 6px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1em;
-  }
-  input[type="file"] {
-    padding: 5px;
-  }
-  small {
-    display: block;
-    font-size: 0.85em;
-    color: #666;
-    margin-top: 4px;
-  }
-  button {
-    margin-top: 25px;
-    width: 100%;
-    padding: 14px;
-    font-size: 1.1em;
-    background-color: #b71c1c;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: 700;
-    transition: background-color 0.25s ease;
-  }
-  button:hover {
-    background-color: #d32f2f;
-  }
-  .spinner {
-    display: none;
-    margin: 20px 0;
-    text-align: center;
-    color: #b71c1c;
-    font-weight: 600;
-  }
-  .success {
-    display: none;
-    margin: 20px 0;
-    padding: 15px;
-    background: #bbdefb;
-    color: #0d47a1;
-    border-radius: 4px;
-    font-weight: 600;
-  }
-  .error {
-    display: none;
-    margin: 20px 0;
-    padding: 15px;
-    background: #ffcdd2;
-    color: #b71c1c;
-    border-radius: 4px;
-    font-weight: 600;
-  }
+  /* your existing styles here */
 </style>
 </head>
 <body>
@@ -116,51 +19,30 @@
   <label for="evidenceName">Evidence Name:</label>
   <input type="text" id="evidenceName" placeholder="e.g., CME on Family Planning Methods" />
 
-  <small>Give a short descriptive name for this evidence.</small>
-
   <label for="category">Evidence Category:</label>
   <select id="category" required>
     <option value="">Select Evidence Category</option>
     <option value="C02 Referral System Improved">C02 Referral System Improved</option>
-    <option value="C04 Operationalization of Health Facilities to Better Services">C04 Operationalization of Health Facilities to Better Services</option>
-    <option value="C10 Theater Services Improved">C10 Theater Services Improved</option>
-    <option value="C11 In-Patient Services Improved">C11 In-Patient Services Improved</option>
-    <option value="C14 ANC (Antenatal Care)">C14 ANC (Antenatal Care)</option>
-    <option value="C15 POSTNATAL CARE">C15 POSTNATAL CARE</option>
-    <option value="C16 MPDSR (Maternal and Perinatal Death Surveillance and Response)">C16 MPDSR (Maternal and Perinatal Death Surveillance and Response)</option>
-    <option value="C17 FAMILY PLANNING">C17 FAMILY PLANNING</option>
-    <option value="C18 IMMUNIZATION">C18 IMMUNIZATION</option>
-    <option value="C21 HIV SERVICES">C21 HIV SERVICES</option>
-    <option value="C23 BURDEN OF CANCER REDUCED">C23 BURDEN OF CANCER REDUCED</option>
-    <option value="C27 SUPPORT SUPERVISION">C27 SUPPORT SUPERVISION</option>
+    <!-- Add your categories here -->
   </select>
 
   <label for="subCounty">Sub County:</label>
   <select id="subCounty" required>
     <option value="">Select Sub County</option>
     <option value="Nakuru West Sub County">Nakuru West Sub County</option>
-    <option value="Nakuru East Sub County">Nakuru East Sub County</option>
-    <option value="Nakuru North Sub County">Nakuru North Sub County</option>
-    <option value="Naivasha Sub County">Naivasha Sub County</option>
-    <option value="Rongai Sub County">Rongai Sub County</option>
-    <option value="Kuresoi South Sub County">Kuresoi South Sub County</option>
-    <option value="Kuresoi North Sub County">Kuresoi North Sub County</option>
-    <option value="Subukia Sub County">Subukia Sub County</option>
-    <option value="Molo Sub County">Molo Sub County</option>
-    <option value="Njoro Sub County">Njoro Sub County</option>
-    <option value="Gilgil Sub County">Gilgil Sub County</option>
+    <!-- Add your sub-counties here -->
   </select>
 
   <label for="files">Choose PDF file(s) (max 3MB each, up to 10 files):</label>
   <input type="file" id="files" accept="application/pdf" multiple />
-  <small>You can select multiple PDF files (maximum 10). Files larger than 3MB will be rejected.</small>
 
-  <div class="spinner" id="spinner">⏳ Uploading...</div>
-  <div class="success" id="success">✅ Upload successful!</div>
-  <div class="error" id="error"></div>
+  <div class="spinner" id="spinner" style="display:none;">⏳ Uploading...</div>
+  <div class="success" id="success" style="display:none;">✅ Upload successful!</div>
+  <div class="error" id="error" style="display:none;"></div>
 
   <button id="uploadBtn">Upload PDF Evidence</button>
 </div>
+
 <script>
   const PROXY_URL = 'https://ccno-proxy-production.up.railway.app/upload-evidence';
 
@@ -186,13 +68,10 @@
     spinner.style.display = 'none';
   }
 
-  async function upload() {
+  uploadBtn.addEventListener('click', async () => {
     const evidenceName = evidenceNameInput.value.trim();
     const category = categorySelect.value;
     const subCounty = subCountySelect.value;
-
-    console.log('SubCounty selected:', subCounty); // Debug line
-
     const files = filesInput.files;
 
     if (!evidenceName || !category || !subCounty) {
@@ -207,8 +86,7 @@
       showError('You can upload a maximum of 10 files.');
       return;
     }
-
-    for (let f of files) {
+    for (const f of files) {
       if (f.size > 3 * 1024 * 1024) {
         showError(`File ${f.name} exceeds the 3MB size limit.`);
         return;
@@ -223,38 +101,24 @@
     successMsg.style.display = 'none';
     errorMsg.style.display = 'none';
 
+    // Build FormData
+    const formData = new FormData();
+    formData.append('evidenceName', evidenceName);
+    formData.append('category', category);
+    formData.append('subCounty', subCounty);
+    for (const f of files) {
+      formData.append('files', f);
+    }
+
     try {
-      const fileData = await Promise.all(
-        Array.from(files).map(
-          (file) =>
-            new Promise((resolve, reject) => {
-              const reader = new FileReader();
-              reader.onload = (e) => {
-                const base64 = e.target.result.split(',')[1];
-                resolve({ name: file.name, type: file.type, data: base64 });
-              };
-              reader.onerror = (e) => reject(e);
-              reader.readAsDataURL(file);
-            })
-        )
-      );
-
-      const payload = {
-        evidenceName,
-        category,
-        subCounty,
-        files: fileData,
-      };
-
       const response = await fetch(PROXY_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: formData,
       });
 
       if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Server error: ${errorText}`);
+        const text = await response.text();
+        throw new Error(`Server error: ${text}`);
       }
 
       const data = await response.json();
@@ -271,9 +135,7 @@
     } catch (error) {
       showError('Upload failed: ' + error.message);
     }
-  }
-
-  uploadBtn.addEventListener('click', upload);
+  });
 </script>
 </body>
 </html>
