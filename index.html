@@ -134,7 +134,7 @@
 </div>
 
 <script>
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyGwRMVtQyksOJBUeeaA6zhUvhSd5reOTdivoS8FSwvL_d-j4Iyj4zZDQrmY88EkfEpzQ/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwIeEuvTnv9FR-N-WWjLkwEziARLZYMVD8rNLhFoC36_7reqtt9ZbY95PRT3mHvv9TUYA/exec";
 
 function upload() {
   const evidenceName = document.getElementById('evidenceName').value.trim();
@@ -142,7 +142,7 @@ function upload() {
   const subCounty = document.getElementById('subCounty').value;
   const files = document.getElementById('files').files;
 
-  hideMessages();
+  clearMessages();
 
   if (!evidenceName || !category || !subCounty || files.length === 0) {
     showError('Please fill in all fields and select at least one file.');
@@ -176,22 +176,24 @@ function upload() {
 
     fetch(WEB_APP_URL, {
       method: 'POST',
-      body: JSON.stringify({ evidenceName, category, subCounty, files: fileData }),
-      headers: { 'Content-Type': 'application/json' }
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ evidenceName, category, subCounty, files: fileData })
     })
     .then(response => response.json())
-    .then(data => {
+    .then(res => {
       document.getElementById('spinner').style.display = 'none';
-      if (data.success) {
+      if (res.status === 'success') {
         document.getElementById('success').style.display = 'block';
         resetForm();
       } else {
-        showError(data.message || "Upload failed");
+        showError(res.message || 'Upload failed.');
       }
     })
-    .catch(error => {
+    .catch(err => {
       document.getElementById('spinner').style.display = 'none';
-      showError('Error: ' + error.message);
+      showError('Error uploading evidence: ' + err.message);
     });
   });
 }
@@ -202,7 +204,7 @@ function showError(msg) {
   errorDiv.style.display = 'block';
 }
 
-function hideMessages() {
+function clearMessages() {
   document.getElementById('error').style.display = 'none';
   document.getElementById('success').style.display = 'none';
 }
@@ -212,7 +214,6 @@ function resetForm() {
   document.getElementById('category').value = '';
   document.getElementById('subCounty').value = '';
   document.getElementById('files').value = '';
-  hideMessages();
 }
 </script>
 
